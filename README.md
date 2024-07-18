@@ -8,8 +8,8 @@
 
 - **Download di contenuti pubblici**: Scarica foto, video e metadati dai post pubblici di un profilo Instagram specificato.
 - **Calcolo hash MD5**: Calcola e salva gli hash MD5 per verificare l'integrità dei file scaricati.
-- **Conversione JSON a TXT**: Converte i file JSON dei metadati in file TXT per una lettura più facile.
-- **Registrazione delle operazioni**: Crea un file di log per tracciare tutte le operazioni eseguite durante il processo di download.
+- **JSON dei metadati**: Converte i file JSON dei metadati in file TXT per una lettura più facile.
+- **Registrazione delle operazioni**: Crea un file di log per tracciare tutte le operazioni eseguite durante il processo di download. _Next release_
 
 ### Utilizzo
 
