@@ -85,6 +85,18 @@ class InstagramDownloader:
         """Imposta un lock per la gestione dei thread."""
         self.thread_lock = threading.Lock()
 
+    def _calculate_sha1(self, file_path):
+        """Calcola l'hash SHA1 di un file."""
+        hash_sha1 = hashlib.sha1()
+        try:
+            with open(file_path, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_sha1.update(chunk)
+            return hash_sha1.hexdigest()
+        except Exception as e:
+            self.logger.error(f"Errore durante il calcolo dell'SHA1 per {file_path}: {e}")
+            return None
+
     def download_profile(self, url, progress_callback=None):
         """Scarica il profilo Instagram dato un URL."""
         try:
@@ -101,7 +113,17 @@ class InstagramDownloader:
             total_posts = profile.mediacount
 
             for i, post in enumerate(posts, 1):
+                # Scarica il post e costruisci il percorso dei file scaricati
+                loader.dirname_pattern = profile_name
                 loader.download_post(post, target=profile_name)
+                post_path = os.path.join(self.base_path, profile_name)
+
+                if os.path.exists(post_path):
+                    for file in os.listdir(post_path):
+                        file_path = os.path.join(post_path, file)
+                        if os.path.isfile(file_path) and (file.endswith(".jpg") or file.endswith(".mp4")):
+                            sha1_hash = self._calculate_sha1(file_path)
+                            self.logger.info(f"SHA1 per {file}: {sha1_hash}")
                 if progress_callback:
                     progress_callback(i, total_posts)
 
